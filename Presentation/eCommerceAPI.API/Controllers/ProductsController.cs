@@ -11,11 +11,11 @@ namespace eCommerceAPI.API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-       
+
         private readonly IProductReadRepository _productReadRepository;
         private readonly IProductWriteRepository _productWriteRepository;
 
-        public ProductsController( IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository)
+        public ProductsController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository)
         {
             _productReadRepository = productReadRepository;
             _productWriteRepository = productWriteRepository;
@@ -24,14 +24,7 @@ namespace eCommerceAPI.API.Controllers
         [HttpGet]
         public async Task Get()
         {
-            //var data = _productService.GetProducts();
-            //return Ok(data);
-            await _productWriteRepository.AddRangeAsync(new List<Product>()
-            {
-                new Product{Id=Guid.NewGuid(),Name="Product 1",Price=100,CreatedDate=DateTime.Now,Stock=10},
-                new Product{Id=Guid.NewGuid(),Name="Product 1",Price=200,CreatedDate=DateTime.Now,Stock=20},
-                new Product{Id=Guid.NewGuid(),Name="Product 1",Price=300,CreatedDate=DateTime.Now,Stock=30},
-            });
+            await _productWriteRepository.AddAsync(new Product { Name = "Mert", Stock = 20, Price = 10 });
             await _productWriteRepository.SaveAsync();
         }
     }
