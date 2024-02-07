@@ -45,7 +45,7 @@ namespace eCommerceAPI.Persistence.Repositories
             return true;
         }
 
-        public async Task<bool> Remove(string id)
+        public async Task<bool> RemoveAsync(string id)
         {
             // Yukarda şartı where T : BaseEntity olarak verdiğimiz için artık gelen değerlerin bir BaseEntity olduğu yanı bir ID si mutlaka olacağını biliyoruz. x=>x.Id yi bu şekilde kullanabiliyoruz. Diğer türlü Find ile ilgili ID yi bulup Remove yapabilirdik ;
             //return await _context.Set<T>().FindAsync(id); 

@@ -15,7 +15,7 @@ namespace eCommerceAPI.Persistence.Repositories
     public class ReadRepository<T> : IReadRepository<T> where T : BaseEntity
     {
         private readonly eCommerceAPIDbContext _context;
-        
+
         public ReadRepository(eCommerceAPIDbContext context)
         {
             _context = context;
@@ -23,8 +23,14 @@ namespace eCommerceAPI.Persistence.Repositories
 
         public DbSet<T> Table => _context.Set<T>();
 
-        public IQueryable<T> GetAll()
+        public IQueryable<T> GetAll(/*bool tracking = true*/)
         {
+            //var datas = Table.AsQueryable();
+            //if (!tracking)
+            //{
+            //    datas = datas.AsNoTracking();
+            //}
+            //return datas;
             return Table.AsNoTracking();
         }
 
@@ -36,7 +42,7 @@ namespace eCommerceAPI.Persistence.Repositories
 
             //return await Table.FindAsync(Guid.Parse(id));
             //return await Table.FirstOrDefaultAsync(x => x.Id == Guid.Parse(id));
-            return await Table.AsNoTracking().FirstOrDefaultAsync(x=>x.Id==Guid.Parse(id));
+            return await Table.FirstOrDefaultAsync(x => x.Id == Guid.Parse(id));
         }
 
         public async Task<T> GetSingleAsync(Expression<Func<T, bool>> expression)
