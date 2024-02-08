@@ -1,4 +1,6 @@
+using eCommerceAPI.Application.Validators.Product;
 using eCommerceAPI.Persistence;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +10,11 @@ builder.Services.AddPersistenceServices();
 //CORS CONFIGURATION
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.WithOrigins("http://")));
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<ProductCreateValidator>()).ConfigureApiBehaviorOptions(option => option.SuppressModelStateInvalidFilter = true);
+// Otomatik olarak diðer Validationlar için de geçerli olacaktýr. Ayný zamanda ConfigureApiBehaviorOptions metodu ile de validasyon durumunu manuel yönetme kabiliyeti ekledik.
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
