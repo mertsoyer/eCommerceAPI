@@ -1,5 +1,6 @@
 ﻿using eCommerceAPI.Application.Abstractions;
 using eCommerceAPI.Application.Repositories;
+using eCommerceAPI.Application.RequestParameters;
 using eCommerceAPI.Application.ViewModels.Product;
 using eCommerceAPI.Domain.Entities;
 using Microsoft.AspNetCore.Http;
@@ -24,9 +25,15 @@ namespace eCommerceAPI.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] Pagination pagination)
         {
-            var datas = _productReadRepository.GetAll();
+            var datas = _productReadRepository.GetAll().Select(x => new
+            {
+                x.Id,
+                x.Name,
+                x.Stock,
+                x.Price,
+            }).Take(pagination.Size * pagination.Page).Skip(pagination.Size);
             return Ok(datas);
         }
 
@@ -40,10 +47,6 @@ namespace eCommerceAPI.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(ProductCreateViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-
-            }
             await _productWriteRepository.AddAsync(new Product
             {
                 Name = model.Name,
