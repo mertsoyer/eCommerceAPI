@@ -1,4 +1,5 @@
 using eCommerceAPI.Application.Validators.Product;
+using eCommerceAPI.Infrastructure.Filters;
 using eCommerceAPI.Persistence;
 using FluentValidation.AspNetCore;
 
@@ -10,7 +11,7 @@ builder.Services.AddPersistenceServices();
 //CORS CONFIGURATION
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.WithOrigins("http://")));
 
-builder.Services.AddControllers()
+builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>())
     .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<ProductCreateValidator>()).ConfigureApiBehaviorOptions(option => option.SuppressModelStateInvalidFilter = true);
 // Otomatik olarak diðer Validationlar için de geçerli olacaktýr. Ayný zamanda ConfigureApiBehaviorOptions metodu ile de validasyon durumunu manuel yönetme kabiliyeti ekledik.
 
