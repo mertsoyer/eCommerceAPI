@@ -12,7 +12,7 @@ using eCommerceAPI.Persistence.Contexts;
 namespace eCommerceAPI.Persistence.Migrations
 {
     [DbContext(typeof(eCommerceAPIDbContext))]
-    [Migration("20240202091147_initial")]
+    [Migration("20240208163656_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

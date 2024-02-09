@@ -33,7 +33,7 @@ namespace eCommerceAPI.API.Controllers
                 x.Name,
                 x.Stock,
                 x.Price,
-            }).Take(pagination.Size * pagination.Page).Skip(pagination.Size);
+            }).Skip(pagination.Size * pagination.Page).Take(pagination.Size).ToList();
             return Ok(datas);
         }
 
