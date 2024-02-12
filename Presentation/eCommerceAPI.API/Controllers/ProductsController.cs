@@ -1,11 +1,9 @@
-﻿using eCommerceAPI.Application.Abstractions;
-using eCommerceAPI.Application.Repositories;
+﻿using eCommerceAPI.Application.Repositories;
 using eCommerceAPI.Application.RequestParameters;
+using eCommerceAPI.Application.Services;
 using eCommerceAPI.Application.ViewModels.Product;
 using eCommerceAPI.Domain.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Net;
 
 namespace eCommerceAPI.API.Controllers
@@ -17,11 +15,14 @@ namespace eCommerceAPI.API.Controllers
 
         private readonly IProductReadRepository _productReadRepository;
         private readonly IProductWriteRepository _productWriteRepository;
+        private readonly IFileService _fileService;
 
-        public ProductsController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository)
+
+        public ProductsController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, IFileService fileService)
         {
             _productReadRepository = productReadRepository;
             _productWriteRepository = productWriteRepository;
+            _fileService = fileService;
         }
 
         [HttpGet]
@@ -74,6 +75,14 @@ namespace eCommerceAPI.API.Controllers
             await _productWriteRepository.RemoveAsync(id);
             await _productWriteRepository.SaveAsync();
 
+            return Ok();
+        }
+
+        //[HttpPost("Upload")]
+        [HttpPost("[action]")] // -> [action] yazılarak direkt metot adı olan Upload ı alıyor
+        public async Task<IActionResult> Upload()
+        {
+            await _fileService.UploadAsync("resource/product-images", Request.Form.Files);
             return Ok();
         }
 

@@ -1,5 +1,6 @@
 using eCommerceAPI.Application.Validators.Product;
 using eCommerceAPI.Infrastructure.Filters;
+using eCommerceAPI.Infrastructure.Services;
 using eCommerceAPI.Persistence;
 using FluentValidation.AspNetCore;
 
@@ -8,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddPersistenceServices();
+builder.Services.AddInfrastructureServices();
 //CORS CONFIGURATION
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.WithOrigins("http://")));
 
@@ -28,6 +30,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseStaticFiles();
 app.UseCors();
 
 app.UseHttpsRedirection();
