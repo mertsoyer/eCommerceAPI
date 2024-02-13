@@ -1,3 +1,4 @@
+using eCommerceAPI.Application;
 using eCommerceAPI.Application.Validators.Product;
 using eCommerceAPI.Infrastructure.Filters;
 using eCommerceAPI.Infrastructure.Services;
@@ -10,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddPersistenceServices();
 builder.Services.AddInfrastructureServices();
+//MEDIATR CONFIGURATION
+builder.Services.AddApplicationServices();
 //CORS CONFIGURATION
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.WithOrigins("http://")));
 
