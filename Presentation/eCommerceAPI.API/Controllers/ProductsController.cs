@@ -9,6 +9,7 @@ using eCommerceAPI.Application.Services;
 using eCommerceAPI.Application.ViewModels.Product;
 using eCommerceAPI.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -16,6 +17,7 @@ namespace eCommerceAPI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes="Admin")]
     public class ProductsController : ControllerBase
     {
 

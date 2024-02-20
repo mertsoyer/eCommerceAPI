@@ -28,7 +28,7 @@ namespace eCommerceAPI.API.Controllers
         public async Task<IActionResult> Login(LoginUserCommandRequest loginUserCommandRequest)
         {
             var response = await _mediator.Send(loginUserCommandRequest);
-            return Ok();
+            return Ok(response);
         }
     }
 }
