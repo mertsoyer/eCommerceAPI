@@ -1,4 +1,5 @@
-﻿using eCommerceAPI.Application.Abstractions.Token;
+﻿using eCommerceAPI.Application.Abstractions.Services;
+using eCommerceAPI.Application.Abstractions.Token;
 using eCommerceAPI.Application.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -12,45 +13,26 @@ namespace eCommerceAPI.Application.Features.Commands.LoginUser
 {
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, LoginUserCommandResponse>
     {
-        private readonly UserManager<Domain.Entities.Identity.AppUser> _userManager;
-        private readonly SignInManager<Domain.Entities.Identity.AppUser> _signInManager;
-        private readonly ITokenHandler _tokenHandler;
-        public LoginUserCommandHandler(UserManager<Domain.Entities.Identity.AppUser> userManager, SignInManager<Domain.Entities.Identity.AppUser> signInManager, ITokenHandler tokenHandler)
+        private readonly IAuthService _authService;
+
+        public LoginUserCommandHandler(IAuthService authService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _tokenHandler = tokenHandler;
+            _authService = authService;
         }
 
         public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByNameAsync(request.UserNameOrEmail);
-
-            if (user == null)
+            var response = await _authService.LoginService(new DTOs.User.LoginUser
             {
-                user = await _userManager.FindByEmailAsync(request.UserNameOrEmail);
-            }
-            if (user == null)
-            {
-                throw new UserNotFoundException();
-            }
-            var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
-            if (result.Succeeded)
-            {
-
-                var token = _tokenHandler.CreateAccessToken();
-                return new LoginUserCommandResponse
-                {
-                    Token = token
-                };
-            }
+                Password = request.Password,
+                UserNameOrEmail = request.UserNameOrEmail,
+            });
 
             return new LoginUserCommandResponse
             {
-                Message = "Login olurken bir  hata oluştu"
+                Message = response.Message,
+                Token = response.Token
             };
-
-
         }
     }
 }

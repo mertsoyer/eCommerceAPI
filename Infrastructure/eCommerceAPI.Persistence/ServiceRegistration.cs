@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using eCommerceAPI.Application.Abstractions;
+using eCommerceAPI.Application.Abstractions.Services;
 using eCommerceAPI.Application.Repositories;
 using eCommerceAPI.Domain.Entities.Identity;
 using eCommerceAPI.Persistence.Concretes;
 using eCommerceAPI.Persistence.Contexts;
 using eCommerceAPI.Persistence.Repositories;
+using eCommerceAPI.Persistence.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -35,6 +37,8 @@ namespace eCommerceAPI.Persistence
             services.AddScoped<IOrderWriteRepository, OrderWriteRepository>();
             services.AddScoped<IProductReadRepository, ProductReadRepository>();
             services.AddScoped<IProductWriteRepository, ProductWriteRepository>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
         }
     }
 }
