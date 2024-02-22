@@ -19,7 +19,7 @@ namespace eCommerceAPI.Infrastructure.Services.Token
             _configuration = configuration;
         }
 
-        public Application.DTOs.Token CreateAccessToken()
+        public Application.DTOs.Token CreateAccessToken(int accessTokenLifeTime)
         {
             var token = new Application.DTOs.Token();
 
@@ -30,7 +30,7 @@ namespace eCommerceAPI.Infrastructure.Services.Token
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             //Oluşturulacak tokenın ayarları veriliyor
-            token.Expiration = DateTime.UtcNow.AddMinutes(5);
+            token.Expiration = DateTime.UtcNow.AddMinutes(accessTokenLifeTime);
             var securityToken = new JwtSecurityToken(
                 issuer: _configuration["Token:Issuer"],
                 audience: _configuration["Token:Audience"],

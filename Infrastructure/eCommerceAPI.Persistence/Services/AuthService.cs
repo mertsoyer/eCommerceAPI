@@ -25,7 +25,7 @@ namespace eCommerceAPI.Persistence.Services
             _userManager = userManager;
         }
 
-        public async Task<LoginUserResponse> LoginService(LoginUser model)
+        public async Task<LoginUserResponse> LoginAsync(LoginUser model, int accessTokenLifeTime)
         {
             var user = await _userManager.FindByEmailAsync(model.UserNameOrEmail);
 
@@ -40,7 +40,7 @@ namespace eCommerceAPI.Persistence.Services
             var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
             if (result.Succeeded)
             {
-                var token = _tokenHandler.CreateAccessToken();
+                var token = _tokenHandler.CreateAccessToken(accessTokenLifeTime);
                 return new LoginUserResponse
                 {
                     Token = token,

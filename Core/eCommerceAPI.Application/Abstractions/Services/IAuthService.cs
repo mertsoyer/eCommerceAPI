@@ -9,6 +9,6 @@ namespace eCommerceAPI.Application.Abstractions.Services
 {
     public interface IAuthService
     {
-        Task<LoginUserResponse> LoginService(LoginUser user);
+        Task<LoginUserResponse> LoginAsync(LoginUser user,int accessTokenLifeTime);
     }
 }
