@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eCommerceAPI.Application.Features.Commands.LoginUser
+namespace eCommerceAPI.Application.Features.Commands.AppUser.LoginUser
 {
     public class LoginUserCommandResponse
     {

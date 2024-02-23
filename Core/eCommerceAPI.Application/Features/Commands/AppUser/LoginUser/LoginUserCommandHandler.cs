@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eCommerceAPI.Application.Features.Commands.LoginUser
+namespace eCommerceAPI.Application.Features.Commands.AppUser.LoginUser
 {
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, LoginUserCommandResponse>
     {
@@ -22,12 +22,12 @@ namespace eCommerceAPI.Application.Features.Commands.LoginUser
 
         public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
         {
-            var response = await _authService.LoginAsync((new DTOs.User.LoginUser
+            var response = await _authService.LoginAsync(new DTOs.User.LoginUser
             {
                 Password = request.Password,
                 UserNameOrEmail = request.UserNameOrEmail,
 
-            }),5);
+            }, 5);
 
             return new LoginUserCommandResponse
             {

@@ -1,4 +1,5 @@
-﻿using eCommerceAPI.Application.DTOs.User;
+﻿using eCommerceAPI.Application.DTOs;
+using eCommerceAPI.Application.DTOs.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace eCommerceAPI.Application.Abstractions.Services
 {
     public interface IAuthService
     {
-        Task<LoginUserResponse> LoginAsync(LoginUser user,int accessTokenLifeTime);
+        Task<LoginUserResponse> LoginAsync(LoginUser user, int accessTokenLifeTime);
+        Task<Application.DTOs.Token> RefreshTokenLoginAsync(string refreshToken);
     }
 }
