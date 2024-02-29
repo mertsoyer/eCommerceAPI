@@ -43,7 +43,7 @@ namespace eCommerceAPI.Persistence.Services
             var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
             if (result.Succeeded)
             {
-                var token = _tokenHandler.CreateAccessToken(accessTokenLifeTime);
+                var token = _tokenHandler.CreateAccessToken(accessTokenLifeTime,user);
                 await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 10);
                 return new LoginUserResponse
                 {
@@ -66,7 +66,7 @@ namespace eCommerceAPI.Persistence.Services
             //kullanıcıya ait gelen refreshtokenEndDate süresi geçerliyse tekrardan yeni accesstoken ve refresh token oluşturulur.
             if (user != null && user.RefreshTokenEndDate > DateTime.UtcNow)
             {
-                var token = _tokenHandler.CreateAccessToken(5);
+                var token = _tokenHandler.CreateAccessToken(5,user);
                 await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 10);
                 return token;
             }

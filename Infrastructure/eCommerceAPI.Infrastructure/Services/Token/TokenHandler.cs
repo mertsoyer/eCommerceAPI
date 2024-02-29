@@ -1,10 +1,13 @@
 ﻿using eCommerceAPI.Application.Abstractions.Token;
+using eCommerceAPI.Domain.Entities.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +23,7 @@ namespace eCommerceAPI.Infrastructure.Services.Token
             _configuration = configuration;
         }
 
-        public Application.DTOs.Token CreateAccessToken(int accessTokenLifeTime)
+        public Application.DTOs.Token CreateAccessToken(int accessTokenLifeTime, AppUser user)
         {
             var token = new Application.DTOs.Token();
 
@@ -37,7 +40,8 @@ namespace eCommerceAPI.Infrastructure.Services.Token
                 audience: _configuration["Token:Audience"],
                 expires: token.Expiration,
                 notBefore: DateTime.UtcNow,
-                signingCredentials: signingCredentials
+                signingCredentials: signingCredentials,
+                claims: new List<Claim> { new(ClaimTypes.Name, user.UserName) }
                 );
 
             //Token oluşturucu sınıftan örnek alımı 
