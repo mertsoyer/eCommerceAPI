@@ -1,4 +1,5 @@
 using eCommerceAPI.API.Configurations.ColumnWriters;
+using eCommerceAPI.API.Extensions;
 using eCommerceAPI.Application;
 using eCommerceAPI.Application.Validators.Product;
 using eCommerceAPI.Infrastructure.Filters;
@@ -13,6 +14,7 @@ using Serilog.Context;
 using Serilog.Core;
 using Serilog.Sinks.MSSqlServer;
 using System.Collections.ObjectModel;
+using System.Runtime;
 using System.Security.Claims;
 using System.Text;
 
@@ -100,7 +102,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
+app.ConfigureExceptionHandler<Program>(app.Services.GetRequiredService<ILogger<Program>>());
 
 app.UseStaticFiles();
 app.UseSerilogRequestLogging();
