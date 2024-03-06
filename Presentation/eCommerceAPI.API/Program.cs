@@ -17,6 +17,8 @@ using System.Collections.ObjectModel;
 using System.Runtime;
 using System.Security.Claims;
 using System.Text;
+using eCommerceAPI.SignalR;
+using eCommerceAPI.SignalR.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,8 +28,11 @@ builder.Services.AddPersistenceServices();
 builder.Services.AddInfrastructureServices();
 //MEDIATR CONFIGURATION
 builder.Services.AddApplicationServices();
+//SIGNALR
+builder.Services.AddSignalRServices();
+
 //CORS CONFIGURATION
-builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.WithOrigins("http://")));
+builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.WithOrigins("http://").AllowCredentials().AllowAnyHeader().AllowAnyMethod()));
 
 builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>())
     .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<ProductCreateValidator>()).ConfigureApiBehaviorOptions(option => option.SuppressModelStateInvalidFilter = true);
@@ -123,5 +128,5 @@ app.Use(async (context, next) =>
 );
 
 app.MapControllers();
-
+app.MapHubs(); // SignalR Hubs
 app.Run();
