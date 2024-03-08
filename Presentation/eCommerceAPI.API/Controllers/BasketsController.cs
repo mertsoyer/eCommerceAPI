@@ -12,11 +12,11 @@ namespace eCommerceAPI.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes ="Admin")]
-    public class BasketController : ControllerBase
+    public class BasketsController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public BasketController(IMediator mediator)
+        public BasketsController(IMediator mediator)
         {
             _mediator = mediator;
         }
