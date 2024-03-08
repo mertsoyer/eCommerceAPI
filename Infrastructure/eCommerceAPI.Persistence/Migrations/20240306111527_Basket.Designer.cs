@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eCommerceAPI.Persistence.Contexts;
 
@@ -11,9 +12,10 @@ using eCommerceAPI.Persistence.Contexts;
 namespace eCommerceAPI.Persistence.Migrations
 {
     [DbContext(typeof(eCommerceAPIDbContext))]
-    partial class eCommerceAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240306111527_Basket")]
+    partial class Basket
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -201,6 +203,7 @@ namespace eCommerceAPI.Persistence.Migrations
             modelBuilder.Entity("eCommerceAPI.Domain.Entities.Order", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
@@ -413,14 +416,6 @@ namespace eCommerceAPI.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("eCommerceAPI.Domain.Entities.Basket", "Basket")
-                        .WithOne("Order")
-                        .HasForeignKey("eCommerceAPI.Domain.Entities.Order", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Basket");
-
                     b.Navigation("Customer");
                 });
 
@@ -493,9 +488,6 @@ namespace eCommerceAPI.Persistence.Migrations
             modelBuilder.Entity("eCommerceAPI.Domain.Entities.Basket", b =>
                 {
                     b.Navigation("BasketItems");
-
-                    b.Navigation("Order")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("eCommerceAPI.Domain.Entities.Customer", b =>

@@ -23,7 +23,7 @@ using eCommerceAPI.SignalR.Hubs;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddHttpContextAccessor(); // Client dan gelen request ile oluþturulan HttpContext nesnesine, katmanlardaki classlar üzerinden eriþebilmemizi saðlayan bir servistir.
 builder.Services.AddPersistenceServices();
 builder.Services.AddInfrastructureServices();
 //MEDIATR CONFIGURATION

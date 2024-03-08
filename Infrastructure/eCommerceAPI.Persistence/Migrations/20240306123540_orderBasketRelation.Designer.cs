@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eCommerceAPI.Persistence.Contexts;
 
@@ -11,9 +12,10 @@ using eCommerceAPI.Persistence.Contexts;
 namespace eCommerceAPI.Persistence.Migrations
 {
     [DbContext(typeof(eCommerceAPIDbContext))]
-    partial class eCommerceAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240306123540_orderBasketRelation")]
+    partial class orderBasketRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,6 +33,9 @@ namespace eCommerceAPI.Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
@@ -39,6 +44,9 @@ namespace eCommerceAPI.Persistence.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -201,11 +209,15 @@ namespace eCommerceAPI.Persistence.Migrations
             modelBuilder.Entity("eCommerceAPI.Domain.Entities.Order", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("BasketId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -377,11 +389,19 @@ namespace eCommerceAPI.Persistence.Migrations
 
             modelBuilder.Entity("eCommerceAPI.Domain.Entities.Basket", b =>
                 {
+                    b.HasOne("eCommerceAPI.Domain.Entities.Order", "Order")
+                        .WithOne("Basket")
+                        .HasForeignKey("eCommerceAPI.Domain.Entities.Basket", "OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("eCommerceAPI.Domain.Entities.Identity.AppUser", "User")
                         .WithMany("Baskets")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Order");
 
                     b.Navigation("User");
                 });
@@ -412,14 +432,6 @@ namespace eCommerceAPI.Persistence.Migrations
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("eCommerceAPI.Domain.Entities.Basket", "Basket")
-                        .WithOne("Order")
-                        .HasForeignKey("eCommerceAPI.Domain.Entities.Order", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Basket");
 
                     b.Navigation("Customer");
                 });
@@ -493,9 +505,6 @@ namespace eCommerceAPI.Persistence.Migrations
             modelBuilder.Entity("eCommerceAPI.Domain.Entities.Basket", b =>
                 {
                     b.Navigation("BasketItems");
-
-                    b.Navigation("Order")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("eCommerceAPI.Domain.Entities.Customer", b =>
@@ -506,6 +515,12 @@ namespace eCommerceAPI.Persistence.Migrations
             modelBuilder.Entity("eCommerceAPI.Domain.Entities.Identity.AppUser", b =>
                 {
                     b.Navigation("Baskets");
+                });
+
+            modelBuilder.Entity("eCommerceAPI.Domain.Entities.Order", b =>
+                {
+                    b.Navigation("Basket")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("eCommerceAPI.Domain.Entities.Product", b =>
